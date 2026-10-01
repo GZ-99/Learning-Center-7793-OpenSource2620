@@ -1,0 +1,36 @@
+<!-- Creates a layout with a left-positioned sidenav and explicit content. -->
+<mat-sidenav-container class="container" autosize>
+  <mat-sidenav
+  mode="side"
+  opened
+  class="sidenav"
+  [class.collapsed]="collapsed()"
+  >
+    <div class="menu-header">
+      <button
+      mat-icon-button
+        (click)="toggleMenu()"
+        aria-label="Toggle sidenav">
+        <mat-icon>menu</mat-icon>
+      </button>
+      @if(!collapsed()) {
+        <span class="menu-title">Menu</span>
+      }
+    </div>
+    <mat-nav-list>
+      @for(option of options; track option.link) {
+        <a mat-list-item [routerLink]="option.link" routerLinkActive="active">
+          <mat-icon matListItemIcon>{{ option.icon }}</mat-icon>
+          @if(!collapsed()) {
+            <span matLine>{{ option.label }}</span>
+          }
+        </a>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

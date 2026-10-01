@@ -1,0 +1,32 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "Java 22"
+    },
+    {
+      "id": 2,
+      "name": "Spring Boot 3"
+    },
+    {
+      "id": 3,
+      "name": "Typescript 5"
+    },
+    {
+      "id": 4,
+      "name": "Angular 22"
+    },
+    {
+      "id": 5,
+      "name": "Next.js 14"
+    }
+  ],
+  "courses": [
+    {
+      "id": 1,
+      "name": "Java 22",
+      "description": "Learn the fundamentals of Java programming language, including syntax, data types, and object",
+      "categoryId": 1
+    }
+  ]
+}
