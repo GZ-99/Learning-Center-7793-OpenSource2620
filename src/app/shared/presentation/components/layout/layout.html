@@ -1,36 +1,30 @@
-<!-- Creates a layout with a left-positioned sidenav and explicit content. -->
-<mat-sidenav-container class="container" autosize>
-  <mat-sidenav
-  mode="side"
-  opened
-  class="sidenav"
-  [class.collapsed]="collapsed()"
-  >
-    <div class="menu-header">
-      <button
-      mat-icon-button
-        (click)="toggleMenu()"
-        aria-label="Toggle sidenav">
+<mat-sidenav-container class="layout-container" autosize>
+  <mat-sidenav mode="side" opened [class.collapsed]="collapsed()" class="sidenav">
+    <div class="brand">
+      <button mat-icon-button (click)="toggleMenu()" aria-label="Toggle navigation">
         <mat-icon>menu</mat-icon>
       </button>
-      @if(!collapsed()) {
-        <span class="menu-title">Menu</span>
+      @if (!collapsed()) {
+        <span>Learning Center</span>
       }
     </div>
+
     <mat-nav-list>
-      @for(option of options; track option.link) {
-        <a mat-list-item [routerLink]="option.link" routerLinkActive="active">
+      @for (option of options; track option.link) {
+        <a mat-list-item [routerLink]="option.link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
           <mat-icon matListItemIcon>{{ option.icon }}</mat-icon>
-          @if(!collapsed()) {
-            <span matLine>{{ option.label }}</span>
+          @if (!collapsed()) {
+            <span matListItemTitle>{{ option.label }}</span>
           }
         </a>
       }
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content>
-    <main class="content">
-      <router-outlet></router-outlet>
+
+  <mat-sidenav-content class="content-shell">
+    <main class="page-content">
+      <router-outlet/>
     </main>
+    <app-footer-content/>
   </mat-sidenav-content>
 </mat-sidenav-container>

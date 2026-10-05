@@ -1,39 +1,32 @@
 import {Component, signal} from '@angular/core';
-import {MatSidenav, MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
-import {MatIcon} from '@angular/material/icon';
-import {MatListItem, MatListModule, MatNavList} from '@angular/material/list';
 import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
-import {MatLine} from '@angular/material/core';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {MatListModule} from '@angular/material/list';
+import {FooterContent} from '../footer-content/footer-content';
 
 @Component({
-  imports: [
-    MatSidenavContainer,
-    MatSidenav,
-    MatSidenavContent,
-    MatIcon,
-    MatNavList,
-    MatListModule,
-    MatListItem,
-    RouterLink,
-    RouterLinkActive,
-    MatLine,
-    RouterOutlet
-  ],
   selector: 'app-layout',
-  styleUrl: './layout.css',
+  imports: [RouterOutlet,
+    RouterLink, RouterLinkActive,
+    MatSidenavModule, MatButtonModule,
+    MatIconModule,
+    MatListModule,
+    FooterContent],
   templateUrl: './layout.html',
+  styleUrl: './layout.css'
 })
 export class Layout {
   readonly collapsed = signal(false);
   readonly options = [
-    {link: '/home', icon: 'home', label: 'Home'},
-    {link: '/about', icon: 'about', label: 'About'},
-    {link: '/contact', icon: 'contact', label: 'Contact'},
-    {link: '/learning/categories', icon: 'category', label: 'Categories'},
-    {link: '/learning/courses', icon: 'school', label: 'Courses'}
+    {link: '/home', label: 'Home', icon: 'home'},
+    {link: '/about', label: 'About', icon: 'info'},
+    {link: '/learning/categories', label: 'Categories', icon: 'category'},
+    {link: '/learning/courses', label: 'Courses', icon: 'school'}
   ];
 
-  toggleMenu() {
-    this.collapsed.update(() => !this.collapsed());
+  toggleMenu(): void {
+    this.collapsed.update(value => !value);
   }
 }
