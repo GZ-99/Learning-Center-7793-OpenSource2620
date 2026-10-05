@@ -1,9 +1,9 @@
-import {computed, inject, Service, Signal, signal} from '@angular/core';
-import {Course} from '../domain/model/course.entity';
-import {Category} from '../domain/model/category.entity';
-import {LearningService} from '../infrastructure/learning.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {retry} from 'rxjs';
+import { computed, inject, Service, Signal, signal } from '@angular/core';
+import { Course } from '../domain/model/course.entity';
+import { Category } from '../domain/model/category.entity';
+import { LearningService } from '../infrastructure/learning.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { retry } from 'rxjs';
 
 /**
  * Holds learning application state and coordinates course/category application layer behavior.
@@ -64,7 +64,7 @@ export class LearningStore {
    * @returns Reactive selection for the requested category.
    */
   getCategoryById = (id: number): Signal<Category | undefined> =>
-    computed(() => id ? this.categories().find(c => c.id === id) : undefined);
+    computed(() => (id ? this.categories().find((c) => c.id === id) : undefined));
 
   /**
    * Selects a course by identifier.
@@ -72,8 +72,8 @@ export class LearningStore {
    * @returns Reactive selection for the requested course.
    */
   getCourseById = (id: number): Signal<Course | undefined> => {
-    return computed(() => id ? this.courses().find(c => c.id === id) : undefined);
-  }
+    return computed(() => (id ? this.courses().find((c) => c.id === id) : undefined));
+  };
 
   /**
    * adds a new course.
@@ -82,17 +82,20 @@ export class LearningStore {
   addCourse = (course: Course): void => {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
-    this.learningService.createCourse(course).pipe(retry(2)).subscribe({
-      next: createdCourse => {
-        createdCourse = this.assignCategoryToCourse(course);
-        this.coursesSignal.update(courses => [...courses, createdCourse]);
-        this.loadingSignal.set(false);
-      },
-      error: err => {
-        this.errorSignal.set(this.formatError(err, 'Failed to create course'));
-        this.loadingSignal.set(false);
-      }
-    });
+    this.learningService
+      .createCourse(course)
+      .pipe(retry(2))
+      .subscribe({
+        next: (createdCourse) => {
+          createdCourse = this.assignCategoryToCourse(course);
+          this.coursesSignal.update((courses) => [...courses, createdCourse]);
+          this.loadingSignal.set(false);
+        },
+        error: (err) => {
+          this.errorSignal.set(this.formatError(err, 'Failed to create course'));
+          this.loadingSignal.set(false);
+        },
+      });
   };
 
   /**
@@ -102,20 +105,23 @@ export class LearningStore {
   updateCourse = (updatedCourse: Course): void => {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
-    this.learningService.updateCourse(updatedCourse).pipe(retry(2)).subscribe({
-      next: course => {
-        course = this.assignCategoryToCourse(course);
-        this.coursesSignal.update(courses =>
-          courses.map(c => c.id === course.id ? course : c)
-        );
-        this.loadingSignal.set(false);
-      },
-      error: err => {
-        this.errorSignal.set(this.formatError(err, 'Failed to update course'));
-        this.loadingSignal.set(false);
-      }
-    });
-  }
+    this.learningService
+      .updateCourse(updatedCourse)
+      .pipe(retry(2))
+      .subscribe({
+        next: (course) => {
+          course = this.assignCategoryToCourse(course);
+          this.coursesSignal.update((courses) =>
+            courses.map((c) => (c.id === course.id ? course : c)),
+          );
+          this.loadingSignal.set(false);
+        },
+        error: (err) => {
+          this.errorSignal.set(this.formatError(err, 'Failed to update course'));
+          this.loadingSignal.set(false);
+        },
+      });
+  };
 
   /**
    * Deletes a course by ID.
@@ -124,17 +130,20 @@ export class LearningStore {
   deleteCourse = (id: number): void => {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
-    this.learningService.deleteCourse(id).pipe(retry(2)).subscribe({
-      next: () => {
-        this.coursesSignal.update(courses => courses.filter(c => c.id !== id));
-        this.loadingSignal.set(false);
-      },
-      error: err => {
-        this.errorSignal.set(this.formatError(err, 'Failed to delete course'));
-        this.loadingSignal.set(false);
-      }
-    });
-  }
+    this.learningService
+      .deleteCourse(id)
+      .pipe(retry(2))
+      .subscribe({
+        next: () => {
+          this.coursesSignal.update((courses) => courses.filter((c) => c.id !== id));
+          this.loadingSignal.set(false);
+        },
+        error: (err) => {
+          this.errorSignal.set(this.formatError(err, 'Failed to delete course'));
+          this.loadingSignal.set(false);
+        },
+      });
+  };
 
   /**
    * Adds a new category.
@@ -143,17 +152,20 @@ export class LearningStore {
   addCategory = (category: Category): void => {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
-    this.learningService.createCategory(category).pipe(retry(2)).subscribe({
-      next: createdCategory => {
-        this.categoriesSignal.update(categories => [...categories, createdCategory]);
-        this.loadingSignal.set(false);
-      },
-      error: err => {
-        this.errorSignal.set(this.formatError(err, 'Failed to create category'));
-        this.loadingSignal.set(false);
-      }
-    });
-  }
+    this.learningService
+      .createCategory(category)
+      .pipe(retry(2))
+      .subscribe({
+        next: (createdCategory) => {
+          this.categoriesSignal.update((categories) => [...categories, createdCategory]);
+          this.loadingSignal.set(false);
+        },
+        error: (err) => {
+          this.errorSignal.set(this.formatError(err, 'Failed to create category'));
+          this.loadingSignal.set(false);
+        },
+      });
+  };
 
   /**
    * Updates an existing category.
@@ -162,19 +174,22 @@ export class LearningStore {
   updateCategory = (updatedCategory: Category): void => {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
-    this.learningService.updateCategory(updatedCategory).pipe(retry(2)).subscribe({
-      next: category => {
-        this.categoriesSignal.update(categories =>
-          categories.map(c => c.id === category.id ? category : c)
-        );
-        this.loadingSignal.set(false);
-      },
-      error: err => {
-        this.errorSignal.set(this.formatError(err, 'Failed to update category'));
-        this.loadingSignal.set(false);
-      }
-    });
-  }
+    this.learningService
+      .updateCategory(updatedCategory)
+      .pipe(retry(2))
+      .subscribe({
+        next: (category) => {
+          this.categoriesSignal.update((categories) =>
+            categories.map((c) => (c.id === category.id ? category : c)),
+          );
+          this.loadingSignal.set(false);
+        },
+        error: (err) => {
+          this.errorSignal.set(this.formatError(err, 'Failed to update category'));
+          this.loadingSignal.set(false);
+        },
+      });
+  };
 
   /**
    * Deletes a category by ID.
@@ -183,18 +198,21 @@ export class LearningStore {
   deleteCategory = (id: number): void => {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
-    this.learningService.deleteCategory(id).pipe(retry(2)).subscribe({
-      next: () => {
-        this.categoriesSignal.update(categories => categories.filter(c => c.id !== id));
-        this.loadingSignal.set(false);
-        this.errorSignal.set(null);
-      },
-      error: err => {
-        this.errorSignal.set(this.formatError(err, 'Failed to delete category'));
-        this.loadingSignal.set(false);
-      }
-    });
-  }
+    this.learningService
+      .deleteCategory(id)
+      .pipe(retry(2))
+      .subscribe({
+        next: () => {
+          this.categoriesSignal.update((categories) => categories.filter((c) => c.id !== id));
+          this.loadingSignal.set(false);
+          this.errorSignal.set(null);
+        },
+        error: (err) => {
+          this.errorSignal.set(this.formatError(err, 'Failed to delete category'));
+          this.loadingSignal.set(false);
+        },
+      });
+  };
 
   /**
    * Loads all courses from the API.
@@ -202,21 +220,22 @@ export class LearningStore {
   private loadCourses = (): void => {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
-    this.learningService.getCourses().pipe(takeUntilDestroyed()).subscribe({
-      next: courses => {
-        console.log(courses);
-        this.coursesSignal.set(courses);
-        this.loadingSignal.set(false);
-        this.errorSignal.set(null);
-        this.assignCategoriesToCourses();
-
-
-      },
-      error: err => {
-        this.errorSignal.set(this.formatError(err, 'Failed to load courses'));
-        this.loadingSignal.set(false);
-      }
-    });
+    this.learningService
+      .getCourses()
+      .pipe(takeUntilDestroyed())
+      .subscribe({
+        next: (courses) => {
+          console.log(courses);
+          this.coursesSignal.set(courses);
+          this.loadingSignal.set(false);
+          this.errorSignal.set(null);
+          this.assignCategoriesToCourses();
+        },
+        error: (err) => {
+          this.errorSignal.set(this.formatError(err, 'Failed to load courses'));
+          this.loadingSignal.set(false);
+        },
+      });
   };
 
   /**
@@ -225,28 +244,33 @@ export class LearningStore {
   private loadCategories = (): void => {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
-    this.learningService.getCategories().pipe(takeUntilDestroyed()).subscribe({
-      next: categories => {
-        this.categoriesSignal.set(categories);
-        this.loadingSignal.set(false);
-        this.errorSignal.set(null);
-      },
-      error: err => {
-        this.errorSignal.set(this.formatError(err, 'Failed to load categories'));
-        this.loadingSignal.set(false);
-      }
-    });
-  }
+    this.learningService
+      .getCategories()
+      .pipe(takeUntilDestroyed())
+      .subscribe({
+        next: (categories) => {
+          this.categoriesSignal.set(categories);
+          this.loadingSignal.set(false);
+          this.errorSignal.set(null);
+        },
+        error: (err) => {
+          this.errorSignal.set(this.formatError(err, 'Failed to load categories'));
+          this.loadingSignal.set(false);
+        },
+      });
+  };
 
   private assignCategoriesToCourses = (): void => {
-    this.coursesSignal.update(courses => courses.map(course => this.assignCategoryToCourse(course)));
+    this.coursesSignal.update((courses) =>
+      courses.map((course) => this.assignCategoryToCourse(course)),
+    );
   };
 
   private assignCategoryToCourse = (course: Course): Course => {
     const categoryId = course.categoryId ?? 0;
-    course.category = categoryId ? this.getCategoryById(categoryId)() ?? null : null;
+    course.category = categoryId ? (this.getCategoryById(categoryId)() ?? null) : null;
     return course;
-  }
+  };
 
   /**
    * Normalizes unknown errors into a display-friendly message.
@@ -256,8 +280,10 @@ export class LearningStore {
    */
   private formatError = (error: unknown, fallback: string): string => {
     if (error instanceof Error) {
-      return error.message.includes('Resource not found') ? `${fallback}: Not found` : error.message;
+      return error.message.includes('Resource not found')
+        ? `${fallback}: Not found`
+        : error.message;
     }
     return fallback;
-  }
+  };
 }
