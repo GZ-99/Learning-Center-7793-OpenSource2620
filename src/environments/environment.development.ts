@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  platformProviderApiBaseUrl: 'http://localhost:3000',
+  platformProviderApiBaseUrl: 'https://fake-api-7arl.onrender.com/',
   platformProviderCategoriesEndpointPath: '/categories',
   platformProviderCoursesEndpointPath: '/courses',
   platformProviderSignInEndpointPath: '/authentication/sign-in',
